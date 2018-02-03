@@ -2,6 +2,7 @@ package com.jdann.aws.wordcounter.controllers;
 
 import com.jdann.aws.wordcounter.dao.WordTotalRepository;
 import com.jdann.aws.wordcounter.dto.Word;
+import com.jdann.aws.wordcounter.dto.WordCountResponse;
 import com.jdann.aws.wordcounter.services.WordCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/")
@@ -27,15 +27,11 @@ public class IndexRestController {
     }
 
     @GetMapping(value = "wordcount", produces = "application/json")
-    public ResponseEntity<List<Word>> countWords(@PathParam("address") String address) {
+    public ResponseEntity<WordCountResponse> countWords(@PathParam("address") String address) {
 
-        List<Word> words = wordCounter.findTopWords(address);
-
-        if (words.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(words, HttpStatus.OK);
-        }
+        WordCountResponse response = new WordCountResponse();
+        wordCounter.findTopWords(address, response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "rebuildDatabase")

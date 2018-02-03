@@ -1,13 +1,10 @@
 package com.jdann.aws.wordcounter.services;
 
-
 import com.jdann.aws.wordcounter.dao.WordTotalRepositoryImpl;
-import com.jdann.aws.wordcounter.dto.Word;
+import com.jdann.aws.wordcounter.dto.WordCountResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 public class WordCounterTest {
 
@@ -19,10 +16,22 @@ public class WordCounterTest {
     }
 
     @Test
-    public void findTopWordsTest() {
+    public void findTopWords_ReturnWordsForDatabaseMatch() {
 
-        List<Word> words = wordCounter.findTopWords("http://www.textfiles.com/etext/FICTION/warpeace.txt");
-        Assert.assertNotNull(words);
+        WordCountResponse response = new WordCountResponse();
+        wordCounter.findTopWords("http://www.textfiles.com/etext/FICTION/warpeace.txt", response);
+        Assert.assertTrue(response.getStatus().equals("Success"));
+        Assert.assertTrue(response.getWords().size() == 10);
+    }
+
+    @Test
+    public void findTopWords_ReturnsProcessingMessageForNewAddress() {
+
+        final String testUrl = "http://test.url";
+        WordCountResponse response = new WordCountResponse();
+        wordCounter.findTopWords(testUrl, response);
+        Assert.assertTrue(response.getStatus().contains(testUrl));
+        Assert.assertTrue(response.getWords().isEmpty());
     }
 
 }
