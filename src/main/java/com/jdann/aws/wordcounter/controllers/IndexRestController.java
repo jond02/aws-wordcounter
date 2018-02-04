@@ -30,7 +30,7 @@ public class IndexRestController {
     public ResponseEntity<WordCountResponse> countWords(@PathParam("address") String address) {
 
         WordCountResponse response = new WordCountResponse();
-        wordCounter.findTopWords(address, response);
+        wordCounter.getFromDynamoOrQueue(address, response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

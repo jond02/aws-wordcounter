@@ -19,7 +19,7 @@ public class WordCounterTest {
     public void findTopWords_ReturnWordsForDatabaseMatch() {
 
         WordCountResponse response = new WordCountResponse();
-        wordCounter.findTopWords("http://www.textfiles.com/etext/FICTION/warpeace.txt", response);
+        wordCounter.getFromDynamoOrQueue("http://www.textfiles.com/etext/FICTION/warpeace.txt", response);
         Assert.assertTrue(response.getStatus().equals("Success"));
         Assert.assertTrue(response.getWords().size() == 10);
     }
@@ -29,7 +29,7 @@ public class WordCounterTest {
 
         final String testUrl = "http://test.url";
         WordCountResponse response = new WordCountResponse();
-        wordCounter.findTopWords(testUrl, response);
+        wordCounter.getFromDynamoOrQueue(testUrl, response);
         Assert.assertTrue(response.getStatus().contains(testUrl));
         Assert.assertTrue(response.getWords().isEmpty());
     }

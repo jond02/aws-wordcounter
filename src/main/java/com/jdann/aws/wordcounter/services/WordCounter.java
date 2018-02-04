@@ -23,7 +23,7 @@ public class WordCounter {
         this.wordTotalRepository = wordTotalRepository;
     }
 
-    public void findTopWords(String address, WordCountResponse response) {
+    public void getFromDynamoOrQueue(String address, WordCountResponse response) {
 
         if (address == null) {
             response.setStatus("Error: Please enter a valid URL.");
@@ -52,5 +52,4 @@ public class WordCounter {
             response.setWords(words);
         }
     }
-
 }
